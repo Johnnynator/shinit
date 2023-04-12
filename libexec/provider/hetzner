@@ -1,0 +1,14 @@
+#!/bin/sh
+
+_HETZNER_META_ADDR=http://169.254.169.254/hetzner/v1
+
+check() {
+    fetch_url "$_HETZNER_META_ADDR/metadata/instance-id"
+    return $?
+}
+
+load() {
+    NAME="$(fetch_url "$_HETZNER_META_ADDR/metadata/hostname" 2>/dev/null)"
+    DATA="$(fetch_url "$_HETZNER_META_ADDR/userdata" 2>/dev/null)"
+    KEYS="$(fetch_url "$_HETZNER_META_ADDR/metadata/public-keys" 2>/dev/null | jq -r '.[]')"
+}
